@@ -50,7 +50,8 @@ public class SalesQuery {
             + " INNER JOIN product ON product.product_id = sales.product_id" 
             + " INNER JOIN customer ON customer.customer_id = sales.customer_id" 
             +" WHERE sales.transaction_date BETWEEN ? AND ?";
-    public String productMin = "UPDATE product SET product_stock = ?, "
-            + "WHERE product_id = ?";        
-            
+    public String stockMin= "UPDATE product set product_stock = product_stock - ? "
+            + "WHERE product_id = ?";    
+    public String stockPlus= "UPDATE product set product_stock = product_stock + ? "
+            + "WHERE product_id = ?";           
 }

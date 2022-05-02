@@ -7,6 +7,8 @@ package salesreports.Frame;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -1236,6 +1238,8 @@ public class MainFrame extends javax.swing.JFrame {
         tf_salescustoname.setText("");
         tf_saleprice.setText("");
         dp_sales.setDate(null);
+        dp_from.setDate(null);
+        dp_to.setDate(null);
         tf_total.setText("");
         tf_quantity.setText("");
         btn_saleupdate.setEnabled(false);
@@ -1334,39 +1338,33 @@ public class MainFrame extends javax.swing.JFrame {
             System.out.println(ex.getMessage());
         }
     }
-    private void productSubmitSales(){
+    private void stockSubmitSales(){
         try{
-        int stock = Integer.parseInt(tf_salestock.getText());
         int quantity = Integer.parseInt(tf_quantity.getText());
-        int rstock = stock - quantity;
         String ids = tf_pid.getText();
         this.product_id = ids;
-        pm.setStock(rstock);
-        sc.updateProduct(ids, pm);
+        pm.setStock(quantity);
+        sc.stockDecrease(ids, pm);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
-    private void productUpdateSales(){
+    
+    private void updateQuantity (){
         try{
         String ids = tf_pid.getText();
-        this.product_id= ids;
-        int stock = Integer.parseInt(tf_salestock.getText());
         int squantity = Integer.parseInt(helper.getValueRows(tb_salesdat, 5));
-        int quantity = Integer.parseInt(tf_quantity.getText()); 
-            System.out.println(stock);
-        if (squantity > quantity){
-            int diffb = (squantity-quantity) + stock;
-            pm.setStock(diffb);
-            sc.updateProduct(ids, pm);
-        }else if (squantity < quantity){
-            int diffl = stock - (quantity - squantity);
-            pm.setStock(diffl);
-            sc.updateProduct(ids, pm);
-            }
-            
+        int nquantity = Integer.parseInt(tf_quantity.getText());
+        if (nquantity > squantity){
+            int result = nquantity - squantity;
+            pm.setStock(result);
+            sc.stockDecrease(ids, pm);
+        }else if  (nquantity < squantity){
+            int result = squantity - nquantity;
+            pm.setStock(result);
+            sc.stockIncrease(ids,pm);
         }
-        catch(Exception e){
+        } catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
@@ -1681,6 +1679,7 @@ public class MainFrame extends javax.swing.JFrame {
         if(stock < quantity){
             JOptionPane.showMessageDialog(null, "insufficient stock"
             );
+            tf_quantity.setText("");
             return;
         }
         countTotalPrice();
@@ -1689,6 +1688,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void btn_datesearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_datesearchActionPerformed
         // TODO add your handling code here:
         try{
+            String a= helper.parseDateToString(dp_from.getDate());
+            String b= helper.parseDateToString(dp_to.getDate());
             searchSalesByDate("transaction_date", helper.parseDateToString
                 (dp_from.getDate()), helper.parseDateToString(dp_to.getDate()));
         }catch(Exception e){
@@ -1730,13 +1731,14 @@ public class MainFrame extends javax.swing.JFrame {
             sm.setTransaction_date(transdate);
 
             Boolean result = sc.update(this.id, sm);
-            productUpdateSales();
+            
             String msg = "Update Failed!";
             if (result) {
                 msg = "Update Success";
             }
 
             JOptionPane.showMessageDialog(null, msg);
+            updateQuantity();
             this.getSalesHistoryData();
             this.clearSales();
         } catch(Exception e)    {
@@ -1760,13 +1762,12 @@ public class MainFrame extends javax.swing.JFrame {
             sm.setTransaction_date(transdate);
 
             Boolean result = sc.create(sm);
-            productSubmitSales();
             String msg = "Data Failed to Add!";
             if (result) {
                 msg = "Data Succeed to Add!";
             }
-
             JOptionPane.showMessageDialog(null, msg);
+            stockSubmitSales();
             showSales();
             
             this.clearSales();

@@ -6,7 +6,6 @@ package salesreports.Controller;
 
 import java.sql.ResultSet;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import salesreports.Helper.Helper;
@@ -92,13 +91,22 @@ public class SalesController extends BaseController {
         map.put(2, date2);
         return this.getWithParameter(map, sql);
     }
-    public boolean updateProduct(String id, ProductModel model) throws ParseException  {     
+    public boolean stockDecrease(String id, ProductModel model) throws ParseException  {     
         Map<Integer, Object> map = new HashMap<>();
         map.put(1, model.getStock());
         map.put(2, id);
         
-        String sql = this.query.productMin;
+        String sql = this.query.stockMin;
         
         return this.preparedStatement(map, sql);
+    }
+    public boolean stockIncrease (String id, ProductModel model) throws ParseException {
+        Map<Integer,Object> map = new HashMap<>();
+        map.put (1, model.getStock());
+        map.put(2, id);
+        
+        String sql = this.query.stockPlus;
+        
+        return this.preparedStatement(map,sql);
     }
 }
