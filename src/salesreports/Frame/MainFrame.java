@@ -1435,7 +1435,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(null, msg);
             this.getAllProductData();
-            this.clearCusto();
+            this.clearProduct();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
