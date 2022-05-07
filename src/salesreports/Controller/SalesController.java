@@ -51,15 +51,6 @@ public class SalesController extends BaseController {
         return this.getWithParameter(map, sql);
     }
     
-//    public ResultSet showByName(String name)    {
-//        String sql = this.query.showByName;
-//        
-//        Map<Integer, Object> map = new HashMap<>();
-//        map.put(1, helper.parseLikeQuery(name));
-//        
-//        return this.getWithParameter(map, sql);
-//    }
-    
     public boolean update(String id, SalesModel model) throws ParseException  {
         String date = helper.parseDateToString(model.getTransaction_date());
        

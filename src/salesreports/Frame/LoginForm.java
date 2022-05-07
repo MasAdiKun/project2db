@@ -138,11 +138,13 @@ public class LoginForm extends javax.swing.JFrame {
         String id = tf_id.getText();
         String pass = new String (pf_pass.getPassword()) ;
         
-        if(!id.equals("admin") && !pass.equals("admin")){
+        if(!id.equals("admin") || !pass.equals("admin")){
         JOptionPane.showMessageDialog(null, "Login Failed");
+        tf_id.setText("");
+        pf_pass.setText("");
         return;
         }
-        JOptionPane.showMessageDialog(rootPane, "Login Successfull");
+        JOptionPane.showMessageDialog(null, "Login Successfull");
         MainFrame mf= new MainFrame();
         mf.setVisible(true);
         mf.setLocationRelativeTo(null);

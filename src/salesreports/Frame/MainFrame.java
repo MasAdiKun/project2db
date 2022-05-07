@@ -7,8 +7,6 @@ package salesreports.Frame;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
@@ -1192,7 +1190,6 @@ public class MainFrame extends javax.swing.JFrame {
     private void getAllProductData()    {
         this.rs = pc.get();
         this.loadProductTable(this.rs);
-        
     }
     
     private void loadProductTable(ResultSet rs) {
@@ -1435,7 +1432,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(null, msg);
             this.getAllProductData();
-            this.clearCusto();
+            this.clearProduct();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -1457,7 +1454,6 @@ public class MainFrame extends javax.swing.JFrame {
         tf_productprice.setText(price);
         cb_category.setSelectedItem(category);
         tf_productstock.setText(stock);                          
-        
     }//GEN-LAST:event_tb_productMouseClicked
 
     private void btn_proupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_proupdateActionPerformed
@@ -1675,8 +1671,6 @@ public class MainFrame extends javax.swing.JFrame {
     private void btn_datesearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_datesearchActionPerformed
         // TODO add your handling code here:
         try{
-            String a= helper.parseDateToString(dp_from.getDate());
-            String b= helper.parseDateToString(dp_to.getDate());
             searchSalesByDate("transaction_date", helper.parseDateToString
                 (dp_from.getDate()), helper.parseDateToString(dp_to.getDate()));
         }catch(Exception e){
